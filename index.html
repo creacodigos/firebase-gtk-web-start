@@ -12,25 +12,45 @@
   <img src="https://firebasestorage.googleapis.com/v0/b/fir-images-a61c9.appspot.com/o/codelab.png?alt=media&token=f45f808c-ce40-4b34-944c-8d8fac00e13d" />
 
  <section id="event-details-container">
-      <h1>Firebase Meetup</h1>
+      <h1>Firebase Reunión</h1>
 
-      <p><i class="material-icons">calendar_today</i> October 30</p>
-      <p><i class="material-icons">location_city</i> San Francisco</p>
-    <!-- ADD THE RSVP BUTTON HERE -->
-    <button id="startRsvp">RSVP</button>
-  </section>
+      <p><i class="material-icons">calendar_today</i> Octubre 30</p>
+      <p><i class="material-icons">location_city</i> Santa Cruz de Tenerife</p>
+      <button id="startRsvp">RSVP</button>
+ 
+ </section>
 
   <hr>
 
   <section id="firebaseui-auth-container"></section>
 
   <section id="description-container">
-      <h2>What we'll be doing</h2>
-      <p>Join us for a day full of Firebase Workshops and Pizza!</p>
+      <h2>¿Qué estaremos haciendo?</h2>
+      <p>¡Únete a nosotros para un día lleno de talleres y pizza de Firebase!</p>
+      
+      <p id="number-attending"></p>
+
   </section>
 
-  <section id="guestbook-container">
-  </section>
+   <section id="guestbook-container">
+     <h2>¿Acudirás al evento?</h2>
+      <button id="rsvp-yes">Sí</button>
+      <button id="rsvp-no">No</button>
+
+   <h2>Mensajes:</h2>
+
+   <form id="leave-message">
+     <label>Envia un mensaje: </label>
+     <input type="text" id="message">
+     <button type="submit">
+       <i class="material-icons">send</i>
+       <span>Enviar</span>
+     </button>
+   </form>
+   
+   <section id="guestbook"></section>
+
+ </section>
 
 </div>
 
