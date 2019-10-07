@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>usuarios Firebase</title>
+    <style>
+    div{
+        padding: 1em;
+        margin: 1em;
+        border: 1px solid #CCCCCC;
+        border-radius: 5px;
+    }</style>
+</head>
+<body>
+
+    <div>
+        <h1>Firebase Create Users</h1>
+        <label for="correo">correo:</label>
+        <input type="email" id="email" name="email" placeholder="Coloca tu email">
+        <label for="password">password:</label>
+        <input type="password" id="pass" name="pass" placeholder="Introduce tu password">
+        <button id="enviar" onclick="crear()">Crear Usuario</button>
+    </div>
+    <div>
+        <h1>Firebase Login Users</h1>
+        <label for="correo">correo:</label>
+        <input type="email" id="emaillogin" name="emaillogin" placeholder="Coloca tu email">
+        <label for="password">password:</label>
+        <input type="password" id="passlogin" name="passlogin" placeholder="Introduce tu password">
+        <button id="enviar" onclick="login()">Loguear Usuario</button>
+        <button onclick="recordarContrasena()">Regenerar contraseña</button>
+    </div>
+    <div id="log"></div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "apiKey",
+    authDomain: "usuarios-authDomain.firebaseapp.com",
+    databaseURL: "https://usuarios-databaseURL.firebaseio.com",
+    projectId: "usuarios-projectId",
+    storageBucket: "",
+    messagingSenderId: "messagingSenderId",
+    appId: "1:appId:web:appId"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Código de la lógica por nosotros
+// https://firebase.google.com/docs/auth/web/start?hl=es-419
+// https://firebase.google.com/docs/auth/web/manage-users
+
+// Configura un observador de estado de autenticación y obtén datos del usuario
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    var providerData = user.providerData;
+        document.getElementById('log').innerHTML = `Logueado como: `+email+`<button onclick="unlogin()">Desloguear</button>`;
+        //console.log(user);
+  } else {
+            
+        document.getElementById('log').innerHTML = 'No Logueado';
+  }
+});
+
+function crear(){
+
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('pass').value;
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                alert('datos guardados');
+                // Solicita verificación de email
+                var user = firebase.auth().currentUser;
+                    user.sendEmailVerification().then(function() {
+                    // Email sent.
+                    }).catch(function(error) {
+                    // An error happened.
+                    });
+            })
+            .catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // [START_EXCLUDE]
+                if (errorCode == 'auth/weak-password') {
+                    alert('The password is too weak.');
+                } else {
+                    alert(errorMessage);
+                }
+                console.log(error);
+                // [END_EXCLUDE]
+            });
+    
+}
+
+function login(){
+
+    var email = document.getElementById('emaillogin').value;
+    var password = document.getElementById('passlogin').value;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                alert('usuario logueado '+email);
+            })
+            .catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+                alert(errorMessage);
+            });
+}
+
+function unlogin(){
+
+firebase.auth().signOut()
+        .then(() => {
+            alert('usuario deslogueado');
+        })
+        .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+            alert(errorMessage);
+        });
+}
+
+function recordarContrasena(){
+
+    var auth = firebase.auth();
+    var emailAddress = document.getElementById('emaillogin').value;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+    // Email sent.
+    }).catch(function(error) {
+    // An error happened.
+    });
+}
+</script>
+</body>
+</html>
